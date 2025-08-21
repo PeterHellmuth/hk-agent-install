@@ -1,0 +1,57 @@
+# HK Agent - Kubernetes Monitoring Agent
+# Version: latest
+# More info: https://github.com/peterhellmuth/hk-agent-install
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hk-agent
+  labels:
+    name: hk-agent
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hk-agent
+  namespace: hk-agent
+  labels:
+    app: hk-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hk-agent
+  template:
+    metadata:
+      labels:
+        app: hk-agent
+    spec:
+      containers:
+      - name: hk-agent
+        image: peterhellmuth/hk-agent:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+        env:
+        - name: DOTNET_ENVIRONMENT
+          value: "Production"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hk-agent-service
+  namespace: hk-agent
+spec:
+  selector:
+    app: hk-agent
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  type: ClusterIP
