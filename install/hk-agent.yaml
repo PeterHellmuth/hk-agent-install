@@ -40,6 +40,13 @@ spec:
         env:
         - name: DOTNET_ENVIRONMENT
           value: "Production"
+        - name: HK_PLATFORM_URL
+          value: "http://192.168.1.30:5027"
+        - name: HK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: hk-agent-config
+              key: api-key
       restartPolicy: Always
 ---
 apiVersion: v1
