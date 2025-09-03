@@ -1,0 +1,33 @@
+name: Update Agent Manifest
+
+on:
+  repository_dispatch:
+    types: [update-install]
+
+jobs:
+  update-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract new image tag
+        id: get_tag
+        run: echo "tag=${{ github.event.client_payload.image_tag }}" >> $GITHUB_OUTPUT
+
+      - name: Update install/hk-agent.yaml
+        run: |
+          sed -i "s|image: peterhellmuth/hk-agent:.*|image: peterhellmuth/hk-agent:${{ steps.get_tag.outputs.tag }}|g" install/hk-agent.yaml
+
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add install/hk-agent.yaml
+          # Commit only if there are changes
+          if ! git diff --staged --quiet; then
+            git commit -m "Update agent image to tag ${{ steps.get_tag.outputs.tag }}"
+            git push
+          else
+            echo "No changes to commit."
+          fi
