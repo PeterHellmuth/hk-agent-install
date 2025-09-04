@@ -62,3 +62,28 @@ spec:
     targetPort: 8080
     name: http
   type: ClusterIP
+---
+# Grant permissions for the agent to read cluster info
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hk-agent-reader
+  namespace: hk-agent
+rules:
+- apiGroups: [""] # core API group
+  resources: ["nodes", "namespaces"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hk-agent-reader-binding
+  namespace: hk-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: hk-agent-reader
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: hk-agent
