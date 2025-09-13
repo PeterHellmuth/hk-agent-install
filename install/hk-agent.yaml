@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: hk-agent
-        image: peterhellmuth/hk-agent:main-5c4f843
+        image: peterhellmuth/hk-agent:main-e223230
         imagePullPolicy: Always
         resources:
           limits:
