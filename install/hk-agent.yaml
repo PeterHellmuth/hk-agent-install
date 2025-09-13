@@ -27,8 +27,8 @@ spec:
         app: kubemind-agent
     spec:
       containers:
-      - name: kubemind-agent
-        image: peterhellmuth/kubemind-agent:main-38d5388
+      - name: hk-agent
+        image: peterhellmuth/hk-agent:main-e223230
         imagePullPolicy: Always
         resources:
           limits:
