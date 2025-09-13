@@ -17,15 +17,15 @@ jobs:
         id: get_tag
         run: echo "tag=${{ github.event.client_payload.image_tag }}" >> $GITHUB_OUTPUT
 
-      - name: Update install/hk-agent.yaml
+      - name: Update install/kubemind-agent.yaml
         run: |
-          sed -i "s|image: peterhellmuth/hk-agent:.*|image: peterhellmuth/hk-agent:${{ steps.get_tag.outputs.tag }}|g" install/hk-agent.yaml
+          sed -i "s|image: peterhellmuth/kubemind-agent:.*|image: peterhellmuth/kubemind-agent:${{ steps.get_tag.outputs.tag }}|g" install/kubemind-agent.yaml
 
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add install/hk-agent.yaml
+          git add install/kubemind-agent.yaml
           # Commit only if there are changes
           if ! git diff --staged --quiet; then
             git commit -m "Update agent image to tag ${{ steps.get_tag.outputs.tag }}"
