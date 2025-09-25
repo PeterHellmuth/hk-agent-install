@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: kubemind-agent
-        image: peterhellmuth/kubemind-agent:main-ce1e15d
+        image: peterhellmuth/kubemind-agent:main-8fbdbc5
         imagePullPolicy: Always
         resources:
           limits:
