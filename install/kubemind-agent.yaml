@@ -64,14 +64,24 @@ spec:
   type: ClusterIP
 ---
 # Grant permissions for the agent to read cluster info
-apiVersion: rbac.authorization.k.io/v1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole 
 metadata:
   name: kubemind-agent-cluster-reader 
 rules:
-- apiGroups: [""]
-  resources: ["nodes", "namespaces"]
-  verbs: ["get", "list"]
+- apiGroups: [""] # Core API Group
+  resources:
+  - nodes
+  - namespaces
+  - pods
+  - events
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"] # Apps API Group
+  resources:
+  - deployments
+  - statefulsets
+  - daemonsets
+  verbs: ["get", "list", "watch"]
 ---
 # Bind the cluster role to the agent's service account
 apiVersion: rbac.authorization.k8s.io/v1
